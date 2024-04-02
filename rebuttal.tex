@@ -1,0 +1,235 @@
+% twocolumn：如之前所述，使文档以两列形式排版。
+% 10pt/11pt/12pt：设置正文的基础字体大小。
+% a4paper/a5paper：指定纸张大小。
+% draft：草稿模式，会显示过长行、浮动体放置位置提示等信息，但不插入图片。
+% titlepage/notitlepage：控制标题页是否单独一页。
+% oneside/twoside：单面或双面打印布局
+\documentclass[twocolumn,a4paper]{article}
+
+% 用于指定输入文件的字符编码为 UTF-8。在早期的 LaTeX 版本中，由于系统默认并不支持直接读取 UTF-8 编码的文档源文件，因此需要通过 inputenc 宏包来处理非 ASCII 字符的输入。
+% 现在，对于使用了最新版 TeX 发行版（如TeX Live 2018及以后版本或MiKTeX 2019及以后版本）的用户来说，UTF-8 已经成为默认的输入编码格式，通常无需再手动加载此宏包。
+\usepackage[utf8]{inputenc}
+
+% 编译相关的宏包
+% \usepackage{xifthen} % 可以在 LaTeX 中实现简单的逻辑判断。如可以使用 ifthenelse 等命令来进行基于布尔值的分支操作，这对于编写更智能和动态的 LaTeX 文档或宏定义非常有用。
+% \usepackage{comment} % 跳过编译特定内容。可用于临时隐藏某部分文本内容（比如草稿阶段的未完成部分、仅供审阅的说明等）时特别有用。使用方法：\begin{comment} 这里是注释文本，编译时这部分内容将被忽略 \end{comment}
+
+% 文档格式相关的宏包
+\usepackage{authblk} % 处理文档作者和单位信息的复杂排版。它支持多个作者、多个单位以及作者与单位之间的关联，并提供了灵活的方式来调整作者列表和单位列表的格式。
+\usepackage[
+    paper=a4paper,
+    top=1cm,
+    bottom=2cm,
+    left=1.5cm,
+    right=1.5cm,
+    headheight=0cm,
+    footskip=0cm
+]{geometry} % 设置纸张和页面
+\usepackage{balance} % 对双栏或多栏文档平衡最后一节（section）或最后一页各栏内容。在文档适当的位置插入命令 \balance，这将会强制开始一个新的页面，并试图平衡接下来的所有内容。
+
+% 色彩相关的宏包
+\usepackage[table,dvipsnames]{xcolor} % color 宏包扩展，提供更丰富灵活的颜色设置。加载可访问更多预定义颜色（包括 dvipsnames 选项加载的一系列专色名称），并能方便地自定义颜色。table 选项允许在表格环境中使用 xcolor 宏包提供的颜色特性，例如可以设定表格单元格的背景色等。
+\definecolor{removed}{RGB}{255,248,242}
+\definecolor{revised}{RGB}{221,244,255}
+\definecolor{refposition}{RGB}{139,69,19}
+\definecolor{refcontent}{RGB}{0,102,204}
+\newcommand{\todo}{\textcolor{red}{TODO.}}
+\newcommand{\refposition}[1]{\textcolor{refposition}{\textit{#1}}}
+\newcommand{\refcontent}[2]{\textcolor{refcontent}{``#1''} (\refposition{#2})}
+\newcommand{\showcolor}[1]{\begingroup\fboxsep=0pt\fbox{{\color{#1}\vrule width 1.2em height 1.4ex}}\endgroup}
+
+% 字体格式相关的宏包
+\usepackage{mathptmx} % 使用 Times New Roman 字体并兼容数学字体
+\usepackage{soul} % 调整文本的间距颜色格式等
+\soulregister{\cite}{7} % 注册\cite命令
+\soulregister{\citep}{7} % 注册\citep命令
+\soulregister{\citet}{7} % 注册\citet命令
+\soulregister{\ref}{7} % 注册\ref命令
+\soulregister{\pageref}{7} % 注册\pageref命令
+\soulregister{\lipsum}{7} % 注册\pageref命令
+\newcommand{\rmvtext}[1]{{\sethlcolor{removed}\hl{``#1''}}}
+\newcommand{\addtext}[1]{{\sethlcolor{revised}\hl{``#1''}}}
+\newcommand{\revise}[3]{\rmvtext{#1}$\rightarrow$\addtext{#2}(\refposition{#3})}
+\hyphenation{op-tical net-works semi-conduc-tor} % 用于手动指定单词在断行时的连字符位置
+
+% 引用、链接相关的宏包
+\usepackage{natbib} % 优化引用的显示方式。相比biblatex宏包兼容性更好
+\usepackage{url} % 使用\url命令，用于格式化和显示 URL，它会自动断行以适应页面宽度，并且通常会转义特殊字符使其能够正确显示为网址的一部分。
+\usepackage[
+    pagebackref=True,
+    breaklinks=true,
+    letterpaper=true,
+    bookmarks=false,     % 关闭书签功能
+    colorlinks,          % 开启彩色链接（默认状态下链接为彩色方框）
+    linkcolor=red,       % 设置普通内联链接颜色为红色
+    citecolor=blue,      % 设置引用链接颜色为蓝色
+    filecolor=magenta,   % 设置文件链接颜色为洋红色
+    urlcolor=cyan,       % 设置 URL 链接颜色为青色
+]{hyperref} % 提供引用能力，同时提供的\href不仅可以生成美观的可点击链接，而且可以自定义显示在文档中的文本内容，不必完全显示完整的 URL。但是不会自动断行。
+% \usepackage{xr} % 引用另一个单独编译的 LaTeX 文档的内容，比如章节、公式、表格或图等。可以像引用本文档内的标签一样引用外部文档的标签，只需在标签前加上相应的前缀（这里是 ext-）
+% \externaldocument[ext-]{manuscript}
+
+% 列表相关的宏包
+\usepackage{enumitem}
+\setlist{nosep}
+
+% 图片相关的宏包
+\usepackage{epsfig} % 用于插入EPS格式的图片
+\usepackage{graphicx} % 提供插入图片支持
+% Latex 排版子图 subfigure, subfig, subcaption：https://blog.csdn.net/yzy_1996/article/details/117574086
+% \usepackage{subfigure} % 很老了，由subfig取代。subfig与hyperref搭配使用会有点小问题，但不要紧。
+% \usepackage{subfig} % subfig和subfigure也不能同时加载，会冲突，主命令是\subfloat
+% \usepackage{subcaption} % subcaption是最新的，但和subfig和subfigure不兼容，主命令是\subcaptionbox
+
+% 表格相关的宏包
+\usepackage{booktabs} % for \toprule, \midrule etc macros
+\usepackage{multirow}
+\usepackage{diagbox}
+% \usepackage{tabularx} % Latex使用tabularx包动态调整表格条目宽度 - hujwei的文章 - 知乎 https://zhuanlan.zhihu.com/p/542672514
+\usepackage{array}
+% \usepackage{threeparttable}
+% \usepackage{makecell} % 更灵活的表格
+
+% 公式相关
+\usepackage{amsmath} % 提供高级的数学排版环境和命令，增强了 LaTeX 内置数学模式的能力。支持多行数学公式（如 align, gather, multiline 等环境）。提供便于输入各种特殊数学符号和结构的命令（例如\frac 分数、\sqrt 开方、\binom 组合记号等）。允许创建自定义数学环境及定理类环境。
+\usepackage{amssymb} % 扩展了 LaTeX 的数学符号库，包含了 AMS（美国数学学会）的一系列数学符号。提供大量额外的数学符号，比如特殊的希腊字母、箭头、二元运算符等。
+\usepackage{bm} % \bm 斜体加粗的数学符号
+
+% 符号相关
+\usepackage{pifont}
+\newcommand{\yes}{\text{\ding{51}}}  % 51,52,53
+\newcommand{\no}{\text{\ding{55}}}  % 54,55,56
+\newcommand{\blank}{—}
+\usepackage{xspace}
+
+% 自定义符号
+\def\eg{\emph{e.g}.,\xspace}
+\def\Eg{\emph{E.g}.,\xspace}
+\def\ie{\emph{i.e}.,\xspace}
+\def\Ie{\emph{I.e}.,\xspace}
+\def\cf{\emph{c.f}.,\xspace}
+\def\Cf{\emph{C.f}.,\xspace}
+\def\etc{\emph{etc}.}
+\def\vs{\emph{vs}.\xspace}
+\def\wrt{w.r.t.\xspace}
+\def\dof{d.o.f.\xspace}
+\def\etal{\emph{et~al}.\xspace}
+
+% 定义审稿人计数器
+\newcounter{reviewer}
+\setcounter{reviewer}{0}
+\newcounter{comment}[reviewer]
+\setcounter{comment}{0}
+
+% 定义审稿人章节、意见环境、回复环境、更改内容环境
+\newcommand{\reviewersection}{\stepcounter{reviewer}
+   \medskip
+   \subsection*{Reviewer \thereviewer}
+}
+\newenvironment{comment}{\refstepcounter{comment}
+  \vspace{2ex}
+  \noindent\textbf{Comment~\arabic{comment}}:\xspace}
+  {\par}
+\newenvironment{reply}{
+  \vspace{0.5ex}
+  \noindent\textbf{Reply}:\xspace}
+  {\par}
+\newenvironment{change}{
+  \vspace{0ex}
+  \noindent\textbf{Corresponding Changes}:\xspace}
+  {\par}
+
+
+% 标题、作者、日期等
+\title{Response to Reviewers of the Original Submission \par {\large Your Paper Title}}
+% \author{Author One, Author Two, and Author Three}
+\author[1]{Author One}
+\author[2]{Author Two}
+\author[2]{Author Three\thanks{Corresponding author.}}
+\affil[1]{Affiliation of Author One}
+\affil[2]{Affiliation of Author Two and Author Three}
+
+\date{\vspace{-5ex}} % 移除日期信息
+
+
+\begin{document}
+\maketitle
+
+\begin{itemize}
+  \item \showcolor{refposition}
+  \item \showcolor{removed} $\rightarrow$ \showcolor{revised}
+  \item \showcolor{refcontent}
+\end{itemize}
+
+
+% --------------------------------------------------------------------
+\reviewersection
+
+\begin{comment} \label{comment:1}
+What is Lorem Ipsum?
+\end{comment}
+\begin{reply}
+  Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+\end{reply}
+\begin{change}
+  \revise{It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.}
+  {It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.}
+  {What is Lorem Ipsum?}
+\end{change}
+
+
+\begin{comment} \label{comment:1}
+Why do we use it?
+\end{comment}
+\begin{reply}
+  It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+  The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+\end{reply}
+\begin{change}
+  \revise{Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.}
+  {Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).}
+  {Why do we use it?}
+\end{change}
+
+
+% --------------------------------------------------------------------
+\reviewersection
+
+\begin{comment} \label{comment:2}
+Where does it come from?
+\end{comment}
+\begin{reply}
+  Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.
+  Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.
+  Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC.
+  This book is a treatise on the theory of ethics, very popular during the Renaissance.
+  The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+\end{reply}
+\begin{change}
+  \refcontent{The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+    Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.}{Where does it come from?}
+\end{change}
+
+
+\begin{comment} \label{comment:2}
+Where can I get some?
+\end{comment}
+\begin{reply}
+  There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
+  If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.
+  All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
+  It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.
+  The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+\end{reply}
+\begin{change}
+  \revise{It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.}
+  {The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.}
+  {Where can I get some?}
+\end{change}
+
+
+\bibliographystyle{IEEEtran}  % 引用风格设置
+\bibliography{IEEEabrv,egbib} % 你的文献库
+
+\end{document}
