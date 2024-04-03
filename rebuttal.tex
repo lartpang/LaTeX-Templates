@@ -41,33 +41,16 @@
 % 字体格式相关的宏包
 \usepackage{mathptmx} % 使用 Times New Roman 字体并兼容数学字体
 \usepackage{soul} % 调整文本的间距颜色格式等
-\soulregister{\cite}{7} % 注册\cite命令
-\soulregister{\citep}{7} % 注册\citep命令
-\soulregister{\citet}{7} % 注册\citet命令
-\soulregister{\ref}{7} % 注册\ref命令
-\soulregister{\pageref}{7} % 注册\pageref命令
-\soulregister{\lipsum}{7} % 注册\pageref命令
+\soulregister{\cite}{7}
+\soulregister{\citep}{7}
+\soulregister{\citet}{7}
+\soulregister{\ref}{7}
+\soulregister{\cref}{7}
+\soulregister{\pageref}{7}
+\soulregister{\cpageref}{7}
 \newcommand{\rmvtext}[1]{{\sethlcolor{removed}\hl{``#1''}}}
 \newcommand{\addtext}[1]{{\sethlcolor{revised}\hl{``#1''}}}
 \newcommand{\revise}[3]{\rmvtext{#1}$\rightarrow$\addtext{#2}(\refposition{#3})}
-\hyphenation{op-tical net-works semi-conduc-tor} % 用于手动指定单词在断行时的连字符位置
-
-% 引用、链接相关的宏包
-\usepackage{natbib} % 优化引用的显示方式。相比biblatex宏包兼容性更好
-\usepackage{url} % 使用\url命令，用于格式化和显示 URL，它会自动断行以适应页面宽度，并且通常会转义特殊字符使其能够正确显示为网址的一部分。
-\usepackage[
-    pagebackref=True,
-    breaklinks=true,
-    letterpaper=true,
-    bookmarks=false,     % 关闭书签功能
-    colorlinks,          % 开启彩色链接（默认状态下链接为彩色方框）
-    linkcolor=red,       % 设置普通内联链接颜色为红色
-    citecolor=blue,      % 设置引用链接颜色为蓝色
-    filecolor=magenta,   % 设置文件链接颜色为洋红色
-    urlcolor=cyan,       % 设置 URL 链接颜色为青色
-]{hyperref} % 提供引用能力，同时提供的\href不仅可以生成美观的可点击链接，而且可以自定义显示在文档中的文本内容，不必完全显示完整的 URL。但是不会自动断行。
-% \usepackage{xr} % 引用另一个单独编译的 LaTeX 文档的内容，比如章节、公式、表格或图等。可以像引用本文档内的标签一样引用外部文档的标签，只需在标签前加上相应的前缀（这里是 ext-）
-% \externaldocument[ext-]{manuscript}
 
 % 列表相关的宏包
 \usepackage{enumitem}
@@ -85,7 +68,7 @@
 \usepackage{booktabs} % for \toprule, \midrule etc macros
 \usepackage{multirow}
 \usepackage{diagbox}
-% \usepackage{tabularx} % Latex使用tabularx包动态调整表格条目宽度 - hujwei的文章 - 知乎 https://zhuanlan.zhihu.com/p/542672514
+% \usepackage{tabularx} % 提供更灵活的表格功能
 \usepackage{array}
 % \usepackage{threeparttable}
 % \usepackage{makecell} % 更灵活的表格
@@ -97,10 +80,10 @@
 
 % 符号相关
 \usepackage{pifont}
-\newcommand{\yes}{\text{\ding{51}}}  % 51,52,53
-\newcommand{\no}{\text{\ding{55}}}  % 54,55,56
+\newcommand{\yes}{\text{\ding{51}}}
+\newcommand{\no}{\text{\ding{55}}}
 \newcommand{\blank}{—}
-\usepackage{xspace}
+\usepackage{xspace}  % 为自定义指令添加自适应空白
 
 % 自定义符号
 \def\eg{\emph{e.g}.,\xspace}
@@ -115,11 +98,36 @@
 \def\dof{d.o.f.\xspace}
 \def\etal{\emph{et~al}.\xspace}
 
+% 引用、链接相关的宏包
+\usepackage{url} % 使用\url命令，用于格式化和显示 URL，它会自动断行以适应页面宽度，并且通常会转义特殊字符使其能够正确显示为网址的一部分。
+\usepackage[
+    pagebackref=True,
+    breaklinks=true,
+    letterpaper=true,
+    bookmarks=false,     % 关闭书签功能
+    colorlinks,          % 开启彩色链接（默认状态下链接为彩色方框）
+    linkcolor=red,       % 设置普通内联链接颜色为红色
+    citecolor=blue,      % 设置引用链接颜色为蓝色
+    filecolor=magenta,   % 设置文件链接颜色为洋红色
+    urlcolor=cyan,       % 设置 URL 链接颜色为青色
+]{hyperref} % 提供引用能力，同时提供的\href不仅可以生成美观的可点击链接，而且可以自定义显示在文档中的文本内容，不必完全显示完整的 URL。但是不会自动断行。
+\usepackage{natbib} % 优化引用的显示方式。相比biblatex宏包兼容性更好
+\usepackage{cleveref} % 优化文档内引用的使用方式
+
+% \usepackage{xr} % 引用另一个单独编译的 LaTeX 文档的内容，比如章节、公式、表格或图等。可以像引用本文档内的标签一样引用外部文档的标签，只需在标签前加上相应的前缀（这里是 ext-）
+% \externaldocument[ext-]{manuscript}
+
 % 定义审稿人计数器
 \newcounter{reviewer}
 \setcounter{reviewer}{0}
+\renewcommand{\thereviewer}{R\#\arabic{reviewer}}
+
 \newcounter{comment}[reviewer]
 \setcounter{comment}{0}
+\renewcommand{\thecomment}{\arabic{comment} (\thereviewer{})} % 这里使用\thereviewer{}可以使用前面定义的形式
+% \crefname{comment}{Comment}{Comments} % 为计数器指定\cref的单复数显式名称
+\crefformat{comment}{Comment~#2#1#3} % 精细控制定义单引用形式
+\crefrangeformat{comment}{Comments~#3#1#4-#5#2#6}  % 精细控制定义多引用形式
 
 % 定义审稿人章节、意见环境、回复环境、更改内容环境
 \newcommand{\reviewersection}{\stepcounter{reviewer}
@@ -139,6 +147,7 @@
   \noindent\textbf{Corresponding Changes}:\xspace}
   {\par}
 
+\hyphenation{op-tical net-works semi-conduc-tor} % 用于手动指定单词在断行时的连字符位置
 
 % 标题、作者、日期等
 \title{Response to Reviewers of the Original Submission \par {\large Your Paper Title}}
@@ -179,7 +188,7 @@ What is Lorem Ipsum?
 \end{change}
 
 
-\begin{comment} \label{comment:1}
+\begin{comment} \label{comment:2}
 Why do we use it?
 \end{comment}
 \begin{reply}
@@ -196,23 +205,24 @@ Why do we use it?
 % --------------------------------------------------------------------
 \reviewersection
 
-\begin{comment} \label{comment:2}
+\begin{comment} \label{comment:3}
 Where does it come from?
 \end{comment}
 \begin{reply}
   Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.
   Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.
   Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC.
-  This book is a treatise on the theory of ethics, very popular during the Renaissance.
+  This book is a treatise on the theory of ethics, very popular during the Renaissance~\cref{comment:1}.
   The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
 \end{reply}
 \begin{change}
   \refcontent{The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
-    Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.}{Where does it come from?}
+    Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.}
+  {Where does it come from?}
 \end{change}
 
 
-\begin{comment} \label{comment:2}
+\begin{comment} \label{comment:4}
 Where can I get some?
 \end{comment}
 \begin{reply}
@@ -220,7 +230,7 @@ Where can I get some?
   If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.
   All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet.
   It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.
-  The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+  The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc~\cref{comment:1,comment:2,comment:3,comment:4}.
 \end{reply}
 \begin{change}
   \revise{It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.}
@@ -229,7 +239,7 @@ Where can I get some?
 \end{change}
 
 
-\bibliographystyle{IEEEtran}  % 引用风格设置
-\bibliography{IEEEabrv,egbib} % 你的文献库
+\bibliographystyle{plainnat}  % 引用风格设置
+\bibliography{mybib} % 你的文献库 mybib.bib
 
 \end{document}
