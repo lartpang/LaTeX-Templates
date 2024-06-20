@@ -1,0 +1,163 @@
+\documentclass[twocolumn,twoside,a4paper]{article}
+\usepackage[utf8]{inputenc}
+
+% 文档格式相关的宏包
+\usepackage[
+    paper=a4paper,
+    top=1cm,
+    bottom=1cm,
+    left=1cm,
+    right=1cm,
+    headheight=1cm,
+    footskip=0.2cm,
+    headsep=0.2cm,
+]{geometry} % 设置纸张和页面
+\usepackage{fancyhdr} % 设置页眉页脚
+\fancypagestyle{myheaderfooter}{%
+    \fancyhf{} % 清除所有默认页眉和页脚
+    \fancyhead[RO]{\thepage} % 在奇数页的右上角放置页码
+    \fancyhead[LE]{\thepage} % 在偶数页的左上角放置页码
+    \fancyhead[C]{Preprint Version} % 中间页眉
+    \renewcommand{\headrulewidth}{0.4pt} % 设置页眉线宽度
+    % \fancyfoot[RO]{\thepage}
+    % \fancyfoot[LE]{\thepage}
+    % \fancyfoot[C]{}
+    % \renewcommand{\footrulewidth}{0.4pt} % 设置页脚线宽度
+}
+\pagestyle{myheaderfooter} % 应用自定义的页眉页脚样式
+
+% 色彩相关的宏包
+\usepackage[table,dvipsnames]{xcolor}
+
+% 列表相关的宏包
+\usepackage{enumitem}
+\setlist{nosep}
+
+% 图片相关的宏包
+\usepackage{epsfig} % 用于插入EPS格式的图片
+\usepackage{graphicx} % 提供插入图片支持
+\usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig} % \subfloat
+
+% 表格相关的宏包
+\usepackage{booktabs} % for \toprule, \midrule etc macros
+\setlength\tabcolsep{3pt}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage[hypcap=false]{caption}
+
+% 符号，公式和字体
+\usepackage{amsmath,amssymb,bm}
+\usepackage{mathpazo}
+\usepackage{pifont}
+\usepackage{xspace}
+
+% 算法相关
+\usepackage{algorithmic}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+
+% 引用、链接相关的宏包
+\usepackage{url} % 使用\url命令，用于格式化和显示 URL，它会自动断行以适应页面宽度，并且通常会转义特殊字符使其能够正确显示为网址的一部分。
+\usepackage[
+    pagebackref=True,
+    breaklinks=true,
+    bookmarks=false,     % 关闭书签功能
+    colorlinks,          % 开启彩色链接（默认状态下链接为彩色方框）
+    linkcolor=magenta,       % 设置普通内联链接颜色为红色
+    citecolor=magenta,      % 设置引用链接颜色为蓝色
+    filecolor=cyan,   % 设置文件链接颜色为洋红色
+    urlcolor=cyan,       % 设置 URL 链接颜色为青色
+]{hyperref} % 提供引用能力，同时提供的\href不仅可以生成美观的可点击链接，而且可以自定义显示在文档中的文本内容，不必完全显示完整的 URL。但是不会自动断行。
+\usepackage[square,comma,numbers,sort]{natbib} % 优化引用的显示方式。相比biblatex宏包兼容性更好
+\setlength{\bibsep}{2pt}
+\usepackage{cleveref} % 优化文档内引用的使用方式
+
+% >>> 自定义 ----------------------------------------
+\definecolor{tabtitle}{gray}{.8}
+\definecolor{ours}{gray}{.95}
+\definecolor{ggray}{RGB}{127,127,127}
+\definecolor{mygray}{RGB}{170,170,170}
+\definecolor{mylred}{RGB}{250,130,130}
+\definecolor{mylgreen}{RGB}{130,250,130}
+\definecolor{mylblue}{RGB}{130,130,250}
+\definecolor{reda}{RGB}{202,0,0}
+\definecolor{redb}{RGB}{217,148,143}
+\definecolor{myyellow}{RGB}{190,144,0}
+\definecolor{mygreen}{RGB}{0,136,51}
+\definecolor{myblue}{RGB}{0,102,204}
+
+\newcommand{\eg}{\emph{e.g}.,\xspace}
+\newcommand{\Eg}{\emph{E.g}.,\xspace}
+\newcommand{\ie}{\emph{i.e}.,\xspace}
+\newcommand{\Ie}{\emph{I.e}.,\xspace}
+\newcommand{\cf}{\emph{c.f}.,\xspace}
+\newcommand{\Cf}{\emph{C.f}.,\xspace}
+\newcommand{\etc}{\emph{etc}.}
+\newcommand{\vs}{\emph{vs}.\xspace}
+\newcommand{\wrt}{w.r.t.\xspace}
+\newcommand{\dof}{d.o.f.\xspace}
+\newcommand{\etal}{\emph{et~al}.\xspace}
+\newcommand{\real}{\mathbb{R}}
+\newcommand{\parhead}[1]{\noindent\textbf{#1}}
+
+\newcommand{\yes}{\text{\ding{51}}}
+\newcommand{\no}{\text{\ding{55}}}
+\newcommand{\blank}{—}
+\newcommand{\none}{—}
+
+\newcommand{\best}[1]{\textcolor{reda}{\textbf{#1}}}
+\newcommand{\second}[1]{\textcolor{mygreen}{\textbf{#1}}}
+\newcommand{\third}[1]{\textcolor{myblue}{\textbf{#1}}}
+
+\newenvironment{authorfoot}
+  {\renewcommand{\thefootnote}{\fnsymbol{footnote}}}
+  {\renewcommand{\thefootnote}{\arabic{footnote}}}
+\newcommand{\keywords}[1]{\noindent\textbf{Keywords}~#1}
+% <<< 自定义 ----------------------------------------
+
+\hyphenation{op-tical net-works semi-conduc-tor} % 用于手动指定单词在断行时的连字符位置
+
+
+\begin{document}
+
+\title{Title}
+\author{
+Author 1\textsuperscript{1}\protect\footnotemark[1],
+Author 2\textsuperscript{1}\protect\footnotemark[1],
+Author 3\textsuperscript{1}\protect\footnotemark[2],
+and Author 4\textsuperscript{1}\\
+{\normalsize
+\textsuperscript{1}Aff 1,
+\textsuperscript{2}Aff 2}
+}
+\date{\vspace{-5ex}} % 移除日期信息
+
+\maketitle
+\thispagestyle{myheaderfooter} % 应用自定义的页眉页脚样式
+
+\begin{authorfoot}
+  \footnotetext[1]{These authors contributed equally to this work.}
+  \footnotetext[2]{Corresponding author.}
+\end{authorfoot}
+
+\begin{abstract}
+  Abstract.
+\end{abstract}
+
+\keywords{Keyword 1, Keyword 2.}
+
+\section{Section 1}
+\verb+\section{Section 1}+
+
+\section{Section 2}
+\verb+\section{Section 2}+
+
+\section{Section 3}
+\verb+\section{Section 3}+
+
+\small{
+  \bibliographystyle{plainnat}  % 引用风格设置
+  \bibliography{mybib}
+}
+
+\end{document}
