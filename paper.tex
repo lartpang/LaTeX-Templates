@@ -1,163 +1,303 @@
 \documentclass[twocolumn,twoside,a4paper]{article}
-\usepackage[utf8]{inputenc}
+% Basic document class with two-column, two-sided A4 paper format
 
-% 文档格式相关的宏包
+%%% INPUT ENCODING %%%
+\usepackage[utf8]{inputenc} % Ensures proper handling of UTF-8 characters
+
+%%% PAGE LAYOUT %%%
 \usepackage[
     paper=a4paper,
-    top=1cm,
-    bottom=1cm,
-    left=1cm,
-    right=1cm,
-    headheight=1cm,
-    footskip=0.2cm,
-    headsep=0.2cm,
-]{geometry} % 设置纸张和页面
-\usepackage{fancyhdr} % 设置页眉页脚
+    top=1cm,        % Top margin
+    bottom=1cm,     % Bottom margin
+    left=1cm,       % Left margin
+    right=1cm,      % Right margin
+    headheight=1cm, % Header height
+    footskip=0.2cm, % Space from bottom of text to footer
+    headsep=0.2cm,  % Space between header and text
+]{geometry}
+% Commonly used commands:
+% \newgeometry{...} - Temporarily change page layout
+% \savegeometry{name} - Save current geometry settings
+% \loadgeometry{name} - Load saved geometry settings
+
+\usepackage{fancyhdr} % Custom headers and footers
+% Commonly used commands:
+% \fancyhead[position]{content} - Set header content (L,C,R for left/center/right)
+% \fancyfoot[position]{content} - Set footer content
+% \renewcommand{\headrulewidth}{pt} - Header rule thickness
+% \renewcommand{\footrulewidth}{pt} - Footer rule thickness
 \fancypagestyle{myheaderfooter}{%
-    \fancyhf{} % 清除所有默认页眉和页脚
-    \fancyhead[RO]{\thepage} % 在奇数页的右上角放置页码
-    \fancyhead[LE]{\thepage} % 在偶数页的左上角放置页码
-    \fancyhead[C]{Preprint Version} % 中间页眉
-    \renewcommand{\headrulewidth}{0.4pt} % 设置页眉线宽度
-    % \fancyfoot[RO]{\thepage}
-    % \fancyfoot[LE]{\thepage}
-    % \fancyfoot[C]{}
-    % \renewcommand{\footrulewidth}{0.4pt} % 设置页脚线宽度
+    \fancyhf{}
+    \fancyhead[RO]{\thepage} % Right odd page
+    \fancyhead[LE]{\thepage} % Left even page
+    \fancyhead[C]{Preprint Version}
+    \renewcommand{\headrulewidth}{0.4pt}
 }
-\pagestyle{myheaderfooter} % 应用自定义的页眉页脚样式
+\pagestyle{myheaderfooter}
 
-% 色彩相关的宏包
-\usepackage[table,dvipsnames]{xcolor}
+%%% COLOR MANAGEMENT %%%
+\usepackage[table,dvipsnames]{xcolor} % Extended color support
+% Commonly used commands:
+% \textcolor{color}{text} - Colored text
+% \colorbox{color}{text} - Text with colored background
+% \definecolor{name}{model}{color-spec} - Define custom colors
+% \rowcolor{color} - Color table row (requires colortbl)
 
-% 列表相关的宏包
-\usepackage{enumitem}
-\setlist{nosep}
+%%% LISTS %%%
+\usepackage{enumitem} % Customizable lists
+% Commonly used commands:
+% \begin{itemize}[options] / \begin{enumerate}[options]
+% Options:
+%   nosep - Remove all vertical spacing
+%   label=... - Custom bullet style
+%   leftmargin=... - Adjust indentation
+\setlist{nosep} % Compact lists by default
 
-% 图片相关的宏包
-\usepackage{epsfig} % 用于插入EPS格式的图片
-\usepackage{graphicx} % 提供插入图片支持
-\usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig} % \subfloat
+%%% GRAPHICS %%%
+\usepackage{graphicx} % Essential graphic inclusion
+% Commonly used commands:
+% \includegraphics[options]{file} - Insert image
+% Options:
+%   width, height, scale - Size adjustments
+%   angle - Rotation
+%   keepaspectratio - Maintain proportions
 
-% 表格相关的宏包
-\usepackage{booktabs} % for \toprule, \midrule etc macros
-\setlength\tabcolsep{3pt}
-\usepackage{colortbl}
-\usepackage{multirow}
-\usepackage{array}
-\usepackage[hypcap=false]{caption}
+\usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig} % Subfigures
+% Commonly used commands:
+% \subfloat[caption]{ \includegraphics{...} } - Create subfigure
 
-% 符号，公式和字体
-\usepackage{amsmath,amssymb,bm}
-\usepackage{mathpazo}
-\usepackage{pifont}
-\usepackage{xspace}
+%%% TABLES %%%
+\usepackage{booktabs} % Professional quality tables
+% Commonly used commands:
+% \toprule - Top table rule
+% \midrule - Middle rule
+% \bottomrule - Bottom rule
+% \cmidrule - Partial horizontal rule
+\setlength\tabcolsep{3pt} % Space between columns
 
-% 算法相关
-\usepackage{algorithmic}
-\usepackage[linesnumbered,ruled]{algorithm2e}
+\usepackage{colortbl} % Colored table cells
+% Commonly used commands:
+% \cellcolor{color} - Color individual cells
+% \rowcolor{color} - Color entire row
 
-% 引用、链接相关的宏包
-\usepackage{url} % 使用\url命令，用于格式化和显示 URL，它会自动断行以适应页面宽度，并且通常会转义特殊字符使其能够正确显示为网址的一部分。
+\usepackage{multirow} % Cells spanning multiple rows
+% Commonly used command:
+% \multirow{num_rows}{width}{content}
+
+\usepackage{array} % Enhanced column formatting
+% Commonly used commands:
+% >{\command} - Pre-format column content
+% <{\command} - Post-format column content
+% m{width}, b{width}, p{width} - Column types
+
+\usepackage[hypcap=false]{caption} % Caption formatting
+% Commonly used commands:
+% \captionof{figure}{text} - Caption without float
+% \captionsetup{options} - Configure caption style
+
+%%% MATH AND TYPOGRAPHY %%%
+\usepackage{amsmath} % Advanced math typesetting
+% Commonly used environments:
+% align, gather, multline - Display equations
+% matrix, pmatrix, cases - Matrix/array environments
+% Commonly used commands:
+% \text{} - Text in math mode
+% \dfrac, \tfrac - Display/text style fractions
+% \binom - Binomial coefficients
+
+\usepackage{amssymb} % Extended math symbols
+% Provides symbols like \mathbb, \mathcal, \mathfrak
+
+\usepackage{bm} % Bold math symbols
+% \bm{symbol} - Bold version of any math symbol
+
+\usepackage{fouriernc} % New Century text + Fourier math fonts
+\usepackage[T1]{fontenc} % Proper font encoding
+
+\usepackage{microtype} % Micro-typography improvements
+% Automatically adjusts spacing and kerning
+
+\usepackage[scale=0.85]{firamono} % Modern monospace font
+\renewcommand{\texttt}[1]{{\normalfont\ttfamily\selectfont #1}}
+
+\usepackage{pifont} % Special symbols
+% Commonly used commands:
+% \ding{number} - Various symbols
+
+\usepackage{xspace} % Smart spacing after commands
+% Ensures proper spacing after custom commands
+
+%%% ALGORITHMS %%%
+\usepackage{algorithmic} % Basic algorithm environment
+% Commonly used commands:
+% \STATE, \IF, \ELSE, \FOR, \WHILE
+
+\usepackage[linesnumbered,ruled]{algorithm2e} % Enhanced algorithm
+% Commonly used commands:
+% \KwIn, \KwOut - Input/output specifications
+% \SetKwFunction{name}{text} - Function definitions
+
+%%% REFERENCES AND LINKS %%%
+\usepackage{url} % Proper URL formatting
+% Commonly used command:
+% \url{http://...} - Properly formatted URLs
+
 \usepackage[
-    pagebackref=True,
+    pagebackref=true,
     breaklinks=true,
-    bookmarks=false,     % 关闭书签功能
-    colorlinks,          % 开启彩色链接（默认状态下链接为彩色方框）
-    linkcolor=magenta,       % 设置普通内联链接颜色为红色
-    citecolor=magenta,      % 设置引用链接颜色为蓝色
-    filecolor=cyan,   % 设置文件链接颜色为洋红色
-    urlcolor=cyan,       % 设置 URL 链接颜色为青色
-]{hyperref} % 提供引用能力，同时提供的\href不仅可以生成美观的可点击链接，而且可以自定义显示在文档中的文本内容，不必完全显示完整的 URL。但是不会自动断行。
-\usepackage[square,comma,numbers,sort]{natbib} % 优化引用的显示方式。相比biblatex宏包兼容性更好
-\setlength{\bibsep}{2pt}
-\usepackage{cleveref} % 优化文档内引用的使用方式
+    bookmarks=false,
+    colorlinks,
+    linkcolor=magenta,
+    citecolor=magenta,
+    filecolor=cyan,
+    urlcolor=cyan,
+]{hyperref} % Interactive links
+% Commonly used commands:
+% \href{url}{text} - Hyperlink with custom text
+% \autoref{label} - Automatic reference type
 
-% >>> 自定义 ----------------------------------------
-\definecolor{tabtitle}{gray}{.8}
-\definecolor{ours}{gray}{.95}
-\definecolor{ggray}{RGB}{127,127,127}
-\definecolor{mygray}{RGB}{170,170,170}
-\definecolor{mylred}{RGB}{250,130,130}
-\definecolor{mylgreen}{RGB}{130,250,130}
-\definecolor{mylblue}{RGB}{130,130,250}
-\definecolor{reda}{RGB}{202,0,0}
-\definecolor{redb}{RGB}{217,148,143}
-\definecolor{myyellow}{RGB}{190,144,0}
-\definecolor{mygreen}{RGB}{0,136,51}
-\definecolor{myblue}{RGB}{0,102,204}
+\usepackage[square,comma,numbers,sort]{natbib} % Citation management
+% Commonly used commands:
+% \citep{key} - Parenthetical citation
+% \citet{key} - Textual citation
+% \bibliographystyle{style} - Citation style
+\setlength{\bibsep}{2pt} % Bibliography item spacing
 
-\newcommand{\eg}{\emph{e.g}.,\xspace}
-\newcommand{\Eg}{\emph{E.g}.,\xspace}
-\newcommand{\ie}{\emph{i.e}.,\xspace}
-\newcommand{\Ie}{\emph{I.e}.,\xspace}
-\newcommand{\cf}{\emph{c.f}.,\xspace}
-\newcommand{\Cf}{\emph{C.f}.,\xspace}
-\newcommand{\etc}{\emph{etc}.}
-\newcommand{\vs}{\emph{vs}.\xspace}
-\newcommand{\wrt}{w.r.t.\xspace}
-\newcommand{\dof}{d.o.f.\xspace}
-\newcommand{\etal}{\emph{et~al}.\xspace}
-\newcommand{\real}{\mathbb{R}}
-\newcommand{\parhead}[1]{\noindent\textbf{#1}}
+\usepackage{cleveref} % Smart cross-referencing
+% Commonly used commands:
+% \cref{label} - Automatic reference type
+% \Cref{label} - Capitalized version
+% \crefrange, \cpageref - Range references
 
-\newcommand{\yes}{\text{\ding{51}}}
-\newcommand{\no}{\text{\ding{55}}}
-\newcommand{\blank}{—}
-\newcommand{\none}{—}
+%%% CUSTOM DEFINITIONS %%%
+% Color definitions
+\definecolor{tabtitle}{gray}{.8}  % Light gray for table titles
+\definecolor{myred}{RGB}{202,0,0} % Custom red
+\definecolor{mygreen}{RGB}{0,136,51} % Custom green
+\definecolor{myblue}{RGB}{0,102,204} % Custom blue
 
-\newcommand{\best}[1]{\textcolor{reda}{\textbf{#1}}}
-\newcommand{\second}[1]{\textcolor{mygreen}{\textbf{#1}}}
-\newcommand{\third}[1]{\textcolor{myblue}{\textbf{#1}}}
+% Academic abbreviations
+\newcommand{\eg}{\emph{e.g.}\xspace} % Example
+\newcommand{\ie}{\emph{i.e.}\xspace} % That is
+\newcommand{\etc}{\emph{etc.}\xspace} % And so on
+\newcommand{\etal}{\emph{et~al.}\xspace} % And others
+\newcommand{\wrt}{w.r.t.\xspace} % With respect to
 
+% Mathematical notations
+\newcommand{\real}{\mathbb{R}} % Real numbers symbol
+
+% Formatting commands
+\newcommand{\parhead}[1]{\noindent\textbf{#1}} % Paragraph heading
+\newcommand{\yes}{\text{\ding{51}}} % Check mark
+\newcommand{\no}{\text{\ding{55}}} % Cross mark
+
+% Highlighting commands
+\newcommand{\best}[1]{\textcolor{myred}{\textbf{#1}}} % Best result
+\newcommand{\second}[1]{\textcolor{mygreen}{\textbf{#1}}} % Second best
+\newcommand{\third}[1]{\textcolor{myblue}{\textbf{#1}}} % Third best
+
+% Special environments
 \newenvironment{authorfoot}
   {\renewcommand{\thefootnote}{\fnsymbol{footnote}}}
   {\renewcommand{\thefootnote}{\arabic{footnote}}}
-\newcommand{\keywords}[1]{\noindent\textbf{Keywords}~#1}
-% <<< 自定义 ----------------------------------------
 
-\hyphenation{op-tical net-works semi-conduc-tor} % 用于手动指定单词在断行时的连字符位置
+\newcommand{\keywords}[1]{\noindent\textbf{Keywords:}~#1} % Keywords format
 
+%%% HYPHENATION %%%
+\hyphenation{op-tical net-works semi-conduc-tor} % Custom word breaks
 
 \begin{document}
 
-\title{Title}
+\title{Optimized LaTeX Template for Academic Papers}
 \author{
-Author 1\textsuperscript{1}\protect\footnotemark[1],
-Author 2\textsuperscript{1}\protect\footnotemark[1],
-Author 3\textsuperscript{1}\protect\footnotemark[2],
-and Author 4\textsuperscript{1}\\
+Author A\textsuperscript{1}\protect\footnotemark[1],
+Author B\textsuperscript{1}\protect\footnotemark[1],
+Author C\textsuperscript{2}\protect\footnotemark[2],
+and Author D\textsuperscript{1}\\
 {\normalsize
-\textsuperscript{1}Aff 1,
-\textsuperscript{2}Aff 2}
+\textsuperscript{1}University,
+\textsuperscript{2}Institute}
 }
-\date{\vspace{-5ex}} % 移除日期信息
+\date{\vspace{-5ex}}
 
 \maketitle
-\thispagestyle{myheaderfooter} % 应用自定义的页眉页脚样式
+\thispagestyle{myheaderfooter}
 
 \begin{authorfoot}
-  \footnotetext[1]{These authors contributed equally to this work.}
-  \footnotetext[2]{Corresponding author.}
+  \footnotetext[1]{Equal contribution.}
+  \footnotetext[2]{Corresponding author: author@institute.edu}
 \end{authorfoot}
 
 \begin{abstract}
-  Abstract.
+  This paper presents an optimized LaTeX template demonstrating proper usage of essential packages for academic writing. We showcase practical implementations of formatting elements including mathematical expressions, tables, figures, algorithms, and cross-references. The template emphasizes clean typography and efficient document structure suitable for technical publications.
 \end{abstract}
 
-\keywords{Keyword 1, Keyword 2.}
+\keywords{LaTeX, academic writing, document preparation, template}
 
-\section{Section 1}
-\verb+\section{Section 1}+
+\section{Introduction}
+This template demonstrates \best{best practices} for academic paper formatting. The \verb+\section+ command creates properly numbered headings. Mathematical notation like $E=mc^2$ or $\real^n$ space appears clearly with AMS packages.
 
-\section{Section 2}
-\verb+\section{Section 2}+
+Cross-references work seamlessly with \cref{sec:methods,fig:sample,tab:performance}. The \texttt{cleveref} package automatically determines reference types.
 
-\section{Section 3}
-\verb+\section{Section 3}+
+\section{Methods}\label{sec:methods}
+\subsection{Mathematical Typesetting}
+The AMS packages provide excellent mathematical formatting:
+\begin{equation}
+  f(x) = \sum_{i=0}^n \frac{\alpha_i}{x-\beta_i} + \bm{\Gamma}\cdot \mathbf{v}
+\end{equation}
 
-\small{
-  \bibliographystyle{plainnat}  % 引用风格设置
-  \bibliography{mybib}
-}
+\subsection{Algorithm Presentation}
+\begin{algorithm}
+  \caption{Example Algorithm}\label{alg:example}
+  \begin{algorithmic}[1]
+    \STATE Initialize population $P_0$\;
+    \FOR{$t=1$ to $T$}
+    \STATE Evaluate fitness $f(P_t)$\;
+    \IF{convergence criteria met}
+    \RETURN best solution\;
+    \ENDIF
+    \STATE Select parents $P'_t \leftarrow$ tournament selection($P_t$)\;
+    \ENDFOR
+  \end{algorithmic}
+\end{algorithm}
+
+\section{Results}
+\subsection{Table Formatting}
+\begin{table}[htbp]
+  \centering
+  \caption{Performance Comparison}\label{tab:performance}
+  \begin{tabular}{lccc}
+    \toprule
+    Method   & Precision   & Recall        & F1-score     \\
+    \midrule
+    Baseline & 0.75        & 0.68          & 0.71         \\
+    Proposed & \best{0.82} & \second{0.79} & \third{0.80} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Figure Integration}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{example-image}
+  \caption{Sample Figure}\label{fig:sample}
+\end{figure}
+
+\section{Conclusion}
+This template demonstrates proper usage of:
+\begin{itemize}
+  \item Document structure commands
+  \item Mathematical typesetting
+  \item Professional table formatting with \texttt{booktabs}
+  \item Algorithm presentation
+  \item Cross-referencing with \texttt{cleveref}
+\end{itemize}
+
+For citations, use \verb+\citep{key}+ for parenthetical citations or \verb+\citet{key}+ for textual references.
+
+  {\small
+    \bibliographystyle{plainnat}
+    \bibliography{references}
+  }
 
 \end{document}
