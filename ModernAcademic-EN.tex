@@ -1,0 +1,217 @@
+% Demo using ModernAcademic-EN with randomized lorem text
+\documentclass[singlecolumn]{ModernAcademic-EN}
+
+% Use lipsum to generate placeholder text
+\usepackage{lipsum}
+% Additional packages for diverse LaTeX examples
+\usepackage{siunitx} % units and numbers
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\small,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  upquote=true
+}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Bibliography (biblatex + biber is configured in the class)
+\addbibresource{references.bib}
+
+% Theme and title layout examples
+\setthemecolor{1a2a6c}
+\settitlepreskip{1ex}
+\settitlelogogap{0.8em}
+% Use a small TikZ logo instead of an external image to demonstrate template
+% configuration via `\titlelogocontent`.
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc,decorations.pathreplacing}
+\titlelogocontent{%
+	\begin{tikzpicture}[baseline=-0.5ex]
+		\fill[academicblue] (0,0) circle (1.6ex);
+		\node[anchor=west, xshift=1.2ex, font=\sffamily\bfseries, text=academicblue] at (0,0) {MA};
+	\end{tikzpicture}%
+}
+
+% Metadata (randomized placeholders)
+\title{An Example Document Generated with Random Text}
+\author{Author A\textsuperscript{1}, Author B\textsuperscript{2}}
+\shorttitle{Demo — Random Text}
+\shortauthor{Author A et~al.}
+\affiliation{\textsuperscript{1}Example University, \textsuperscript{2}Another Institute}
+\email{contact@example.org}
+\keywords{lorem ipsum, template demo, random text}
+
+\abstract{\lipsum[1]}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+This document demonstrates a variety of LaTeX constructs that are commonly useful in academic writing.  We show math, environments (theorem/definition/proof), floats (figures/tables), pseudocode, code listings, cross-references and citations. For background on information theory and compression we refer to classic and recent works \cite{shannon1948mathematical, wallace1992jpeg, balle2017endtoend}.
+
+\subsection{Motivation and Contributions}
+The aim is to provide compact, well-structured examples that align with modern LaTeX best practices (semantic markup, labeled floats, and bibliographic management).
+
+\section{Template configuration and TikZ examples}
+\label{sec:template}
+
+Below we provide concrete examples of the template configuration commands and a small TikZ-annotated visualization of the title area that maps commands to visual elements. The figure is intentionally lightweight so you can adapt it as a guide for customizing the real title/logo.
+
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[font=\sffamily,node distance=6mm,>=Stealth]
+		% Logo, title and author nodes (visual mockup)
+		\node (logo) at (0,0) {\begin{tikzpicture}[baseline=-0.5ex]
+				\fill[academicblue] (0,0) circle (1.6ex);
+				\node[anchor=west, xshift=1.2ex, font=\sffamily\bfseries, text=academicblue] at (0,0) {MA};
+			\end{tikzpicture}};
+
+		\node[anchor=west] (title) at (1.8,0.4) {\large\bfseries\color{academicblue}An Example Document Generated with Random Text};
+		\node[anchor=west] (author) at (1.8,-0.6) {\small Author A, Author B};
+
+		% Annotating arrows to show which macros affect which visual parts
+		\draw[->] (logo) -- ++(-1.4,1.0) node[left, font=\footnotesize] {\texttt{\textbackslash titlelogocontent\{...\}}};
+		\draw[->] (title.north) -- ++(0,1.0) node[above, font=\footnotesize] {\texttt{\textbackslash setthemecolor\{...\}}};
+		\draw[->] (title.south) -- ++(0,-1.0) node[below, font=\footnotesize] {\texttt{\textbackslash settitlelogogap\{...\}}};
+		\draw[->] (author) -- ++(2.6,0.0) node[right, font=\footnotesize, align=left] {\texttt{\textbackslash affiliation\{...\}} \\
+			\texttt{\textbackslash email\{...\}}};
+	\end{tikzpicture}
+	\caption{Annotated title-area showing how template configuration commands map to visual elements.}
+	\label{fig:title-annot}
+\end{figure}
+
+Below is a short configuration snippet you can adapt in the preamble to change the template appearance. These commands are defined by the class `ModernAcademic-EN`.
+\begin{lstlisting}[language=TeX,caption={Common template configuration commands},label={lst:config}]
+% Theme and title layout examples
+\setthemecolor{b91c1c}       % hex or RGB (e.g., 185,28,28)
+\settitlepreskip{2cm}        % space above title / logo area
+\settitlelogogap{0.5em}      % gap between logo and title
+\titlelogocontent{...}       % provide TikZ or other content for the logo
+\shorttitle{Short Title}     % running header title
+\shortauthor{A. Author et~al.}
+\affiliation{Department, University}
+\email{you@institution.edu}
+\keywords{keyword1, keyword2}
+\end{lstlisting}
+
+These examples show both the API (commands) and a visual mapping; modify values in the preamble to observe changes in the compiled output.
+
+\section{Mathematical Examples}
+\label{sec:math}
+
+An inline example: the signal-to-noise ratio may be written as $\mathrm{SNR}=10\log_{10}(P_{\mathrm{sig}}/P_{\mathrm{noise}})$. For typesetting units use the `siunitx` package: e.g. \SI{3.3}{\kilo\byte} or \SI{2e3}{\metre\per\second}.
+
+Displayed equations and alignment:
+\begin{equation}
+	E = mc^2 \label{eq:energy}
+\end{equation}
+
+Multiple aligned equations and a referenced equation:
+\begin{align}
+	H(X)                  & = -\sum_{x} p(x) \log p(x), \label{eq:entropy}     \\
+	D_{\mathrm{KL}}(P\|Q) & = \sum_x P(x) \log\frac{P(x)}{Q(x)}. \label{eq:kl}
+\end{align}
+
+We can refer to Equation~\eqref{eq:entropy} using \verb|\eqref| or \verb|\cref|: see \cref{eq:entropy,eq:kl}.
+
+\begin{theorem}[Sample theorem]
+	\label{thm:sample}
+	Let $f:\mathbb{R}\to\mathbb{R}$ be continuous and integrable on $[a,b]$. Then
+	\[\int_a^b f(x)\,dx = F(b)-F(a)\]
+	where $F$ is any antiderivative of $f$.
+\end{theorem}
+
+\begin{proof}
+	This is the Fundamental Theorem of Calculus; a concise proof appears in many analysis texts \cite{berger1971rate}.
+\end{proof}
+
+\section{Figures and Tables}
+\label{sec:figtab}
+
+Figures should always include a descriptive caption and a label for cross-referencing. Use subfigures for related visuals.
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}{0.48\linewidth}
+		\centering
+		% Placeholder TikZ image (avoids missing external file)
+		\begin{tikzpicture}
+			\node[draw,fill=gray!10,minimum width=\linewidth,minimum height=3cm,inner sep=6pt]{\small Placeholder image A};
+		\end{tikzpicture}
+		\caption{Example image A}
+		\label{fig:sample-a}
+	\end{subfigure}\hfill
+	\begin{subfigure}{0.48\linewidth}
+		\centering
+		\begin{tikzpicture}
+			\node[draw,fill=gray!10,minimum width=\linewidth,minimum height=3cm,inner sep=6pt]{\small Placeholder image B};
+		\end{tikzpicture}
+		\caption{Example image B}
+		\label{fig:sample-b}
+	\end{subfigure}
+	\caption{A pair of sample subfigures demonstrating the use of \texttt{subcaption}.}
+	\label{fig:sample-pair}
+\end{figure}
+
+Table examples using booktabs for high-quality rules:
+\begin{table}[htbp]
+	\centering
+	\caption{Summary of experimental conditions}
+	\label{tab:conditions}
+	\begin{tabular}{lcc}
+		\toprule
+		Condition & Parameter & Value \\
+		\midrule
+		Baseline  & $\alpha$  & 0.1   \\
+		Variant A & $\alpha$  & 0.2   \\
+		Variant B & $\alpha$  & 0.05  \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+Refer to Figure~\ref{fig:sample-pair} and Table~\ref{tab:conditions} for examples of cross-references.
+
+\section{Algorithms and Code}
+\label{sec:algo}
+
+Pseudocode using the `algorithm` + `algpseudocode` packages:
+\begin{algorithm}
+	\caption{Simple gradient descent}
+	\label{alg:gd}
+	\begin{algorithmic}[1]
+		\Procedure{GradientDescent}{$f, x_0, \eta, T$}
+		\State $x \gets x_0$
+		\For{$t\gets 1$ to $T$}
+		\State $g \gets \nabla f(x)$
+		\State $x \gets x - \eta g$
+		\EndFor
+		\State \textbf{return} $x$
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+Inline code and small listings using `listings`:
+\begin{lstlisting}[language=Python,caption={Tiny illustrative snippet},label={lst:py}]
+def square(x):
+	return x*x
+
+print(square(3))
+\end{lstlisting}
+
+\section{Citations and Bibliography}
+\label{sec:citations}
+
+Here we demonstrate citation commands. Classic information theory is by Shannon \cite{shannon1948mathematical}; modern learned compression approaches include Ballé et~al.\ \cite{balle2017endtoend} and Cheng et~al.\ \cite{cheng2020learned}. For video coding standards see \cite{vvc2021standard}.
+
+At the end of the document we print the bibliography managed by \texttt{biblatex}.
+
+\printbibliography[heading=bibintoc]
+
+\section{Conclusion}
+We added targeted examples demonstrating best practices for LaTeX academic manuscripts: semantic structure, labeled floats and math, consistent citations, and lightweight pseudocode/listings. Replace placeholder images and further tune formatting as needed.
+
+\end{document}
