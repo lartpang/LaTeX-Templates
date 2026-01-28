@@ -100,6 +100,9 @@
 % --- Colored Boxes ---
 \RequirePackage[most]{tcolorbox}
 
+% --- Icons for social links ---
+\RequirePackage{fontawesome5}
+
 % --- Tables and Figures ---
 \RequirePackage{graphicx}
 \RequirePackage{booktabs}
@@ -159,8 +162,18 @@
 \newcommand{\@shorttitle}{}
 \newcommand{\@shortauthor}{}
 
+% First page style with optional logo in header
 \fancypagestyle{plain}{%
   \fancyhf{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+% First page style with logo in header right
+\fancypagestyle{firstpageheaderlogo}{%
+  \fancyhf{}
+  \fancyhead[R]{\@titlelogo}
   \fancyfoot[C]{\thepage}
   \renewcommand{\headrulewidth}{0pt}
   \renewcommand{\footrulewidth}{0pt}
@@ -192,9 +205,37 @@
 % Setter for the gap between logo and title
 \newcommand{\settitlelogogap}[1]{\renewcommand{\@titlelogogap}{#1}}
 
-% Visibility toggles: title logo and keywords
-\newif\iftitlelogoshown
-\titlelogoshowntrue
+% Logo position toggles: three independent switches (all default to false)
+% Each position can be enabled independently, and multiple positions can be active simultaneously
+\newif\if@logointitle
+\newif\if@logoinheader
+\newif\if@logoinabstract
+\@logointitlefalse
+\@logoinheaderfalse
+\@logoinabstractfalse
+
+% User commands to enable logo in specific positions
+\newcommand{\showlogointitle}{\@logointitletrue}
+\newcommand{\hidelogointitle}{\@logointitlefalse}
+\newcommand{\showlogoinheader}{\@logoinheadertrue}
+\newcommand{\hidelogoinheader}{\@logoinheaderfalse}
+\newcommand{\showlogoinabstract}{\@logoinabstracttrue}
+\newcommand{\hidelogoinabstract}{\@logoinabstractfalse}
+
+% Social links storage (list of {icon}{text}{url} triplets)
+\newcommand{\@sociallinks}{}
+% Add a social link: \addsociallink{\faGithub}{GitHub}{https://github.com/user/repo}
+\newcommand{\addsociallink}[3]{%
+  \g@addto@macro\@sociallinks{\@socialitem{#1}{#2}{#3}}%
+}
+% Internal: render a single social link item
+\newcommand{\@socialitem}[3]{%
+  \href{#3}{#1\,#2}\hspace{1em}%
+}
+% Clear all social links
+\newcommand{\clearsociallinks}{\renewcommand{\@sociallinks}{}}
+
+% Visibility toggle for keywords
 \newif\ifshowkeywords
 % By default do not show Keywords block. When user calls `\keywords{...}`
 % the macro below will set the content and enable the keywords display.
@@ -228,19 +269,54 @@
 %% 5. TITLE PAGE DESIGN
 %% ============================================================================
 
-\newtcolorbox{abstractbox}{%
-  enhanced,
-  colback=abstractbg,
-  colframe=abstractborder,
-  boxrule=0.5pt,
-  arc=4pt,
-  left=12pt,
-  right=12pt,
-  top=10pt,
-  bottom=10pt,
-  fontupper=\small,
-  before skip=1em,
-  after skip=1.5em,
+% Base abstract box style
+\tcbset{
+  abstractboxbase/.style={
+    enhanced,
+    colback=abstractbg,
+    colframe=abstractborder,
+    boxrule=0.5pt,
+    arc=4pt,
+    left=12pt,
+    right=12pt,
+    top=10pt,
+    bottom=10pt,
+    fontupper=\small,
+    before skip=1em,
+    after skip=1.5em,
+  }
+}
+
+% Abstract box without overlay
+\newtcolorbox{abstractbox}{abstractboxbase}
+
+% Abstract box with social links only (bottom-left)
+\newtcolorbox{abstractboxsocial}{
+  abstractboxbase,
+  overlay={
+    \node[anchor=south west, inner sep=0pt, xshift=12pt, yshift=8pt, font=\footnotesize]
+      at (frame.south west) {\@sociallinks};
+  }
+}
+
+% Abstract box with logo only (bottom-right)
+\newtcolorbox{abstractboxlogo}{
+  abstractboxbase,
+  overlay={
+    \node[anchor=south east, inner sep=0pt, xshift=-12pt, yshift=8pt]
+      at (frame.south east) {\@titlelogo};
+  }
+}
+
+% Abstract box with both social links (bottom-left) and logo (bottom-right)
+\newtcolorbox{abstractboxboth}{
+  abstractboxbase,
+  overlay={
+    \node[anchor=south west, inner sep=0pt, xshift=12pt, yshift=8pt, font=\footnotesize]
+      at (frame.south west) {\@sociallinks};
+    \node[anchor=south east, inner sep=0pt, xshift=-12pt, yshift=8pt]
+      at (frame.south east) {\@titlelogo};
+  }
 }
 
 % Optionally allow footnotes inside the abstract box to be typeset as normal page footnotes
@@ -248,11 +324,56 @@
 \ifabstractfootnotes
   \RequirePackage{footnote}
   \makesavenoteenv{abstractbox}
+  \makesavenoteenv{abstractboxsocial}
+  \makesavenoteenv{abstractboxlogo}
+  \makesavenoteenv{abstractboxboth}
 \fi
 
+% Internal command to render abstract box content
+\newcommand{\@abstractboxcontent}{%
+  \begin{center}
+    {\large\@author}%
+    \ifx\@affiliation\@empty\else
+      \\[0.4em]
+      {\small\itshape\@affiliation}%
+    \fi
+    \ifx\@email\@empty\else
+      \\[0.2em]
+      {\small\ttfamily\@email}%
+    \fi
+  \end{center}
+
+  \ifx\@abstract\@empty\else
+    \vspace{0.5em}
+    {\centering\textcolor{abstractborder}{\rule{0.3\textwidth}{0.4pt}}\par}
+    \vspace{0.5em}
+
+    \noindent\textbf{\sffamily\color{academicblue}Abstract.}\quad
+    \@abstract
+
+    \ifshowkeywords
+      \ifx\@keywords\@empty\else
+        \vspace{0.6em}
+
+        \noindent\textbf{\sffamily\color{academicblue}Keywords:}\quad\@keywords
+      \fi
+    \fi
+  \fi
+
+  % Add vertical space if social links or abstract-logo is present
+  \ifx\@sociallinks\@empty\else
+    \vspace{1.2em}
+  \fi
+  \if@logoinabstract
+    \ifx\@titlelogo\@empty\else
+      \vspace{1.2em}
+    \fi
+  \fi
+}
+
 \newcommand{\@maketitleblock}{%
-  % Pre-title space and logo (controlled by visibility toggle)
-  \iftitlelogoshown
+  % Pre-title space and logo (only if enabled for title position)
+  \if@logointitle
     \ifx\@titlelogo\@empty\else
       \vspace*{\@titlepreskip}
       {%
@@ -261,8 +382,7 @@
       }%
       \vspace{\@titlelogogap}
     \fi
-  \fi
-  \ifx\@titlelogo\@empty
+  \else
     \ifdim\@titlepreskip>0pt
       \vspace*{\@titlepreskip}
     \fi
@@ -272,36 +392,45 @@
     \vspace{1.2em}
   \end{center}
 
-  \begin{abstractbox}
-    \begin{center}
-      {\large\@author}%
-      \ifx\@affiliation\@empty\else
-        \\[0.4em]
-        {\small\itshape\@affiliation}%
+  % Select appropriate abstract box based on configuration
+  \if@logoinabstract
+    % Logo enabled in abstract box
+    \ifx\@titlelogo\@empty
+      % No logo defined
+      \ifx\@sociallinks\@empty
+        \begin{abstractbox}\@abstractboxcontent\end{abstractbox}
+      \else
+        \begin{abstractboxsocial}\@abstractboxcontent\end{abstractboxsocial}
       \fi
-      \ifx\@email\@empty\else
-        \\[0.2em]
-        {\small\ttfamily\@email}%
-      \fi
-    \end{center}
-
-    \ifx\@abstract\@empty\else
-      \vspace{0.5em}
-      {\centering\textcolor{abstractborder}{\rule{0.3\textwidth}{0.4pt}}\par}
-      \vspace{0.5em}
-
-      \noindent\textbf{\sffamily\color{academicblue}Abstract.}\quad
-      \@abstract
-
-      \ifshowkeywords
-        \ifx\@keywords\@empty\else
-          \vspace{0.6em}
-
-          \noindent\textbf{\sffamily\color{academicblue}Keywords:}\quad\@keywords
-        \fi
+    \else
+      % Logo defined
+      \ifx\@sociallinks\@empty
+        \begin{abstractboxlogo}\@abstractboxcontent\end{abstractboxlogo}
+      \else
+        \begin{abstractboxboth}\@abstractboxcontent\end{abstractboxboth}
       \fi
     \fi
-  \end{abstractbox}
+  \else
+    % Logo not in abstract box
+    \ifx\@sociallinks\@empty
+      \begin{abstractbox}\@abstractboxcontent\end{abstractbox}
+    \else
+      \begin{abstractboxsocial}\@abstractboxcontent\end{abstractboxsocial}
+    \fi
+  \fi
+}
+
+% Helper to select first page style based on logo position
+\newcommand{\@selectfirstpagestyle}{%
+  \if@logoinheader
+    \ifx\@titlelogo\@empty
+      \thispagestyle{plain}%
+    \else
+      \thispagestyle{firstpageheaderlogo}%
+    \fi
+  \else
+    \thispagestyle{plain}%
+  \fi
 }
 
 \if@twocol
@@ -309,12 +438,12 @@
     \twocolumn[%
       \@maketitleblock
     ]%
-    \thispagestyle{plain}%
+    \@selectfirstpagestyle
   }
 \else
   \renewcommand{\maketitle}{%
     \@maketitleblock
-    \thispagestyle{plain}%
+    \@selectfirstpagestyle
   }
 \fi
 

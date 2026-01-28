@@ -31,11 +31,47 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning,arrows.meta,calc,decorations.pathreplacing}
 \titlelogocontent{%
-	\begin{tikzpicture}[baseline=-0.5ex]
-		\fill[academicblue] (0,0) circle (1.6ex);
-		\node[anchor=west, xshift=1.2ex, font=\sffamily\bfseries, text=academicblue] at (0,0) {MA};
+	\begin{tikzpicture}[baseline=-0.5ex, scale=1.2]
+		% Shield background
+		\fill[academicblue!15]
+			(0,0.8) -- (-0.6,0.5) -- (-0.6,-0.3) -- (0,-0.7) -- (0.6,-0.3) -- (0.6,0.5) -- cycle;
+		\draw[academicblue, line width=0.8pt]
+			(0,0.8) -- (-0.6,0.5) -- (-0.6,-0.3) -- (0,-0.7) -- (0.6,-0.3) -- (0.6,0.5) -- cycle;
+		% Inner decorative border
+		\draw[academicblue!60, line width=0.3pt]
+			(0,0.65) -- (-0.45,0.4) -- (-0.45,-0.2) -- (0,-0.52) -- (0.45,-0.2) -- (0.45,0.4) -- cycle;
+		% Open book
+		\fill[white] (-0.25,0.1) -- (-0.25,-0.2) -- (0,-0.1) -- (0,0.2) -- cycle;
+		\fill[white] (0.25,0.1) -- (0.25,-0.2) -- (0,-.1) -- (0,0.2) -- cycle;
+		\draw[academicblue, line width=0.4pt] (-0.25,0.1) -- (-0.25,-0.2) -- (0,-0.1) -- (0,0.2) -- cycle;
+		\draw[academicblue, line width=0.4pt] (0.25,0.1) -- (0.25,-0.2) -- (0,-0.1) -- (0,0.2) -- cycle;
+		% Book lines (text representation)
+		\draw[academicblue!50, line width=0.2pt] (-0.2,0) -- (-0.05,0.08);
+		\draw[academicblue!50, line width=0.2pt] (-0.2,-0.08) -- (-0.05,0);
+		\draw[academicblue!50, line width=0.2pt] (0.2,0) -- (0.05,0.08);
+		\draw[academicblue!50, line width=0.2pt] (0.2,-0.08) -- (0.05,0);
+		% Quill pen (simplified)
+		\draw[academicblue, line width=0.5pt] (0.15,0.35) -- (0.35,0.55);
+		\fill[academicblue!80] (0.35,0.55) -- (0.42,0.48) -- (0.5,0.65) -- (0.38,0.62) -- cycle;
+		% MA text below shield
+		\node[font=\fontfamily{ppl}\selectfont\bfseries, text=academicblue] at (0,-1.0) {MA};
+		% Decorative laurel leaves (simplified)
+		\draw[academicblue!70, line width=0.3pt] (-0.35,-0.85) arc (150:90:0.2);
+		\draw[academicblue!70, line width=0.3pt] (-0.28,-0.78) arc (150:90:0.15);
+		\draw[academicblue!70, line width=0.3pt] (0.35,-0.85) arc (30:90:0.2);
+		\draw[academicblue!70, line width=0.3pt] (0.28,-0.78) arc (30:90:0.15);
 	\end{tikzpicture}%
 }
+
+% Logo position configuration (three independent switches, all default to hidden)
+% Uncomment any combination to show logo in those positions:
+\showlogointitle     % Logo above title (centered)
+\showlogoinheader    % Logo in first page header (right)
+\showlogoinabstract  % Logo in abstract box (bottom-right)
+
+% Social links (shown in abstract box bottom-left)
+\addsociallink{\faGithub}{Code}{https://github.com/user/repo}
+\addsociallink{\faGlobe}{Project}{https://example.com/project}
 
 % Metadata (randomized placeholders)
 \title{An Example Document Generated with Random Text}
@@ -62,7 +98,7 @@ The aim is to provide compact, well-structured examples that align with modern L
 
 Below we provide concrete examples of the template configuration commands and a small TikZ-annotated visualization of the title area that maps commands to visual elements. The figure is intentionally lightweight so you can adapt it as a guide for customizing the real title/logo.
 
-\begin{figure}[htbp]
+\begin{figure*}[htbp]
 	\centering
 	\begin{tikzpicture}[font=\sffamily,node distance=6mm,>=Stealth]
 		% Logo, title and author nodes (visual mockup)
@@ -83,7 +119,7 @@ Below we provide concrete examples of the template configuration commands and a 
 	\end{tikzpicture}
 	\caption{Annotated title-area showing how template configuration commands map to visual elements.}
 	\label{fig:title-annot}
-\end{figure}
+\end{figure*}
 
 Below is a short configuration snippet you can adapt in the preamble to change the template appearance. These commands are defined by the class `ModernAcademic-EN`.
 \begin{lstlisting}[language=TeX,caption={Common template configuration commands},label={lst:config}]
@@ -97,6 +133,13 @@ Below is a short configuration snippet you can adapt in the preamble to change t
 \affiliation{Department, University}
 \email{you@institution.edu}
 \keywords{keyword1, keyword2}
+% Logo position (independent switches, default hidden)
+\showlogointitle       % show logo above title
+\showlogoinheader      % show logo in header (right)
+\showlogoinabstract    % show logo in abstract (bottom-right)
+% Social links (abstract box bottom-left)
+\addsociallink{\faGithub}{Code}{https://github.com/...}
+\addsociallink{\faGlobe}{Project}{https://example.com}
 \end{lstlisting}
 
 These examples show both the API (commands) and a visual mapping; modify values in the preamble to observe changes in the compiled output.
